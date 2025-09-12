@@ -1,13 +1,13 @@
 function g = g_st(M, w)
 %G_ST Sum of the squared values of a displaced matrix.
 %   D = G_ST(M, W) calculates the sum of the square of the elements of a
-%   matrix 'M' displaced with all combinations of pairs of elements from 
-%   the set [-W+1,...,0,...,W-1] in both dimensions. This function computes 
-%   de initial conditions while calculating the sum of the squares of the 
-%   elements of the displaced matrix using the bounding values, i.e., for 
-%   a displacement of the form (W-1, X) or (X, W-1), where X <= W-1. The
-%   results are stored in a matrix of dimension (2*W-1,2*W-1). The method 
-%   can be simplified with the following diagram:
+%   matrix 'M' displaced with all combinations of a pair of elements of the set 
+%   [-W+1,...,0,...,W-1] in both of its dimensions. This function computes 
+%   de initial conditions calculating the sum of the squares of the 
+%   displaced matrix using the bounding values, i.e. for a displacement of 
+%   the form (W-1, X) or (X, W-1), where X <= W-1, and the values are 
+%   stored in a matrix of dim = (W-1,W-1). The procedure could be
+%   simplified with the following diagram:
 %
 %   ___________________________________________
 %   |g(-w+1,-w+1) ... g(0,-w+1) ... g(w-1,-w+1)|

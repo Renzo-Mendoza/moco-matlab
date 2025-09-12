@@ -1,12 +1,11 @@
 function D = D_st(dimA, w)
 %D_ST Area of the set of D matrices.
 %   D = D_ST(DIMA, W) calculates the area of all element-wise difference
-%   matrix between an initial matrix (with dimension 'DIMA') and the same
-%   matrix displaced with all combinations of pairs of elements from the
-%   set [-W+1,...,0,...,W-1] in both dimensions. All displacements are
-%   stored in a matrix 'D' of dimension (2*W-1,2*W-1). This functions uses 
-%   dynamic programming to reduce the computation time for 
-%   recounting the number of elements in a displaced matrix. 
+%   matrix between an initial matrix and a matrix displaced
+%   (both with the same dimension 'DIMA') displaced with all combinations 
+%   of pairs of elements from the set [-W+1,...,0,...,W-1] in both dimensions. This 
+%   functions uses dynamic programing to reduce the computation time for 
+%   recounting the number of elements of an displaced matrix. 
 
 % Matrix dimensions and initial variable
 m = dimA(1); n = dimA(2);

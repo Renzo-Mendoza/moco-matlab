@@ -1,23 +1,23 @@
 function d = moco(A, B, w, srch_wdw, scl, max_val, downs_meth, is_norm)
-%MOCO Fast motion correction for calcium imaging videos in MATLAB.
-%   d = MOCO(A, B, W, SRCH_WDW, SCL, MAX_VAL, DOWNS_METH, ISNORM) performs
-%   the motion correction (moco) to determine the displacement between a 
-%   template image 'B' and a stack image 'A'. Both images are normalized 
+%MOCO Full fast motion correction for calcium imaging videos in MATLAB.
+%   D = MOCO(A, B, W, SRCH_WDW, SCL, MAX_VAL, DOWNS_METH, ISNORM) performs
+%   the motion correction (moco) to determine the displacement 'D' between  
+%   a template image 'B' and a stack image 'A'. Both images are normalized 
 %   if they are not already normalized, which should be specified by the 
-%   input 'is_norm'. Then, the images are downsampled with a scale 
-%   parameter 'scl' to reduce the computational cost. The downsampling 
-%   method is specified by the user:
+%   input 'IS_NORM'. Then, the images are downsampled with a scale 
+%   parameter 'SCL' to reduce the computational cost. The downsampling 
+%   method DOWNS_METH is specified by the user:
 %
 %       'length' - considers the maximum dimension of the images,
 %       'area'   - considers the area of the images.
 %
 %   The images are downsampled as many times as necessary until their
-%   specified parameters (length or area) are less than 'max_val'. The
-%   parameter 'w' refers to the maximum possible displacement between the
+%   specified parameters (length or area) are less than 'MAX_VAL'. The
+%   parameter 'W' refers to the maximum possible displacement between the
 %   images and should be less than or equal to the minimum dimension of 
 %   the images. Finally, after computing the displacement and rescaling 
 %   the images, moco corrects the upsampled displacement considering 
-%   a square search window with size 'srch_wdw' with a initial offset 
+%   a square search window with size 'SRCH_WDW' with a initial offset 
 %   equal to the previous displacement.
 %
 %   MOCO uses dynamic programming and FFT-based 2D convolution frameworks 
@@ -36,7 +36,7 @@ if ~is_norm
     B = (B - M) / S;
 end
 
-% Define downsampling method
+% Number of downsamples with desired method
 if downs_meth == "length"
     k = ceil( max( log( max(size(A)) / max_val) / log(scl), 0) );
 elseif downs_meth == "area"
@@ -49,10 +49,10 @@ d = [0; 0];
 % Initial estimation (downsampled image)
 A_n = imresize(A, (1/scl)^k);
 B_n = imresize(B, (1/scl)^k);
-w_n = ceil(w*(1/scl)^k)+1;
+w_n = ceil(w * (1/scl)^k);
 d   = dsp_moco(A_n, B_n, d, w_n);
 
-% Upsample images until their initial dimensions
+% Upsample images until they have their initial dimensions
 for i = k-1:-1:0
     A_n = imresize(A, (1/scl)^i);
     B_n = imresize(B, (1/scl)^i);

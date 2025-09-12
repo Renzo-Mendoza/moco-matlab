@@ -14,7 +14,7 @@ for i = 1:vid_reader.NumFrames
     imwrite(frame, fullfile(folder, file_name));
 end
 
-%% Set parameter and select ROI
+%% Set parameters
 
 % Images paths 
 folder = fullfile(pwd, "images");
@@ -22,7 +22,7 @@ files  = dir(fullfile(folder, '*.png'));
 paths  = cell(length(files), 1);
 N      = ceil(log10(length(dir(fullfile(folder, '\*.png')))));
 
-% Smooth filter size
+% Smoothing filter to suppress noise
 krn_size = [7, 7];
 sigma    = 5;
 kernel   = fspecial('gaussian', krn_size, sigma); 
@@ -34,6 +34,10 @@ max_len    = 256;
 scl        = 2;
 w          = 120; % Maximum expected displacement
 srch_wdw   = 4;
+img_dim    = size(imread(fullfile(folder, templ_name)));
+
+%%  Select ROI
+% You can select a desired region where moco will be performed
 
 % Select ROI coordinates
 disp_idx = length(files);
@@ -75,11 +79,13 @@ end
 close(fig)
 
 %% Full moco
+% You can also use the whole images, just uncomment the line below.
+% x_i = 1; x_f = img_dim(2); y_i = 1; y_f = img_dim(1);
 
 % Set template image
 B     = double(imread(fullfile(folder, templ_name)));
-B     = B(y_i:y_f,x_i:x_f);
-B     = conv2(B, kernel, 'same');
+B     = B(y_i:y_f,x_i:x_f); 
+B     = conv2(B, kernel, 'same'); % You can also use the base image
 [S,M] = std(B, [], 'all');
 B     = (B - M) / S;
 
@@ -89,7 +95,7 @@ parfor k = 1:length(files)
     paths{k,1} = fullfile(files(k).folder, files(k).name);
     I      = double(imread(paths{k,1}));
     A      = I(y_i:y_f,x_i:x_f);
-    A      = conv2(A, kernel, 'same');
+    A      = conv2(A, kernel, 'same'); % You can also use the base image
     [S,M]  = std(A, [], 'all');
     A      = (A - M) / S;
     d(:,k) = moco(A, B, w, srch_wdw, scl, max_len, "length", true);
