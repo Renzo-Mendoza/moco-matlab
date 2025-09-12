@@ -2,11 +2,11 @@ function d = moco(A, B, w, srch_wdw, scl, max_val, downs_meth, is_norm)
 %MOCO Fast motion correction for calcium imaging videos in MATLAB.
 %   d = MOCO(A, B, W, SRCH_WDW, SCL, MAX_VAL, DOWNS_METH, ISNORM) performs
 %   the motion correction (moco) to determine the displacement between a 
-%   template image 'B' and a stack image 'A'. Both images are normalized 
-%   if they are not already normalized, which should be specified by the 
-%   input 'is_norm'. Then, the images are downsampled with a scale 
-%   parameter 'scl' to reduce the computational cost. The downsampling 
-%   method is specified by the user:
+%   template image 'B' and a stack image 'A'. Both images are normalized if they 
+%   are not already normalized, which should be specified by the input 'is_norm'. Then, the 
+%   images are downsampled with a scale parameter 'scl' to reduce the 
+%   computational cost. The downsampling method is specified
+%   by the user:
 %
 %       'length' - considers the maximum dimension of the images,
 %       'area'   - considers the area of the images.
@@ -14,21 +14,18 @@ function d = moco(A, B, w, srch_wdw, scl, max_val, downs_meth, is_norm)
 %   The images are downsampled as many times as necessary until their
 %   specified parameters (length or area) are less than 'max_val'. The
 %   parameter 'w' refers to the maximum possible displacement between the
-%   images and should be less than or equal to the minimum dimension of 
-%   the images. Finally, after computing the displacement and rescaling 
-%   the images, moco corrects the upsampled displacement considering 
-%   a square search window with size 'srch_wdw' with a initial offset 
-%   equal to the previous displacement.
+%   images and should be less than or equal to the minimum dimension of the images.
+%   Finally, after computing the displacement and rescaling the images, moco corrects the upsampled displacement considering 
+%   a square search window with size 'srch_wdw' with a initial offset equal to the previous displacement.
 %
-%   MOCO uses dynamic programming and FFT-based 2D convolution frameworks 
-%   to optimize computational cost and reduce the processing time [1].
+%   MOCO uses dynamic programming and FFT-based convolution frameworks to
+%   optimize computational cost and reduce the processing time [1].
 %
 %   References:
 %   [1] Dubbs A, Guevara J and Yuste R (2016) moco: Fast Motion Correction 
 %   for Calcium Imaging. Front. Neuroinform. 10:6. doi: 
 %   10.3389/fninf.2016.00006
 
-% Check normalization
 if ~is_norm
     [S,M] = std(A,[],'all');
     A = (A - M) / S;
@@ -36,14 +33,11 @@ if ~is_norm
     B = (B - M) / S;
 end
 
-% Define downsampling method
 if downs_meth == "length"
     k = ceil( max( log( max(size(A)) / max_val) / log(scl), 0) );
 elseif downs_meth == "area"
     k = ceil( sqrt( max( log(numel(A) / max_val) / log(scl), 0) ) );
 end
-
-% Set displacement variable
 d = [0; 0];
 
 % Initial estimation (downsampled image)
@@ -52,7 +46,6 @@ B_n = imresize(B, (1/scl)^k);
 w_n = ceil(w*(1/scl)^k)+1;
 d   = dsp_moco(A_n, B_n, d, w_n);
 
-% Upsample images until their initial dimensions
 for i = k-1:-1:0
     A_n = imresize(A, (1/scl)^i);
     B_n = imresize(B, (1/scl)^i);
