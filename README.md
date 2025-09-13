@@ -1,4 +1,4 @@
-# moco MATLAB
+# moco for MATLAB
 
 moco is a fast motion-correction approach for calcium imaging videos [1]. This algorithm is available as a plugin for ImageJ and an implementation for MATLAB is presented here. moco utilizes dynamic programming and FFT-based 2D convolution that reduce the time and complexity of the computation of a weigted $L_2$ norm difference matrix between a "template" $b_{i,j}$ and stack images $a_{i,j}$, with $i = \{1,\cdots,m\}$ and $j = \{1,\cdots,n\}$ ($m$ and $n$ are the height and width of the image, respectively). This matrix is defined as $f_{s,t}$ and the indexes are selected such that $\max(|s|,|t|) < w < \min(m,n),$ where $w$ is an input parameter related to the maximum expected displacement and is set by the user:
 
