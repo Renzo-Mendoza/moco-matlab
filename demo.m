@@ -105,7 +105,6 @@ end
 close all
 
 % Outlier filtering
-smooth_fact = 0.01;
 dx = filloutliers(d(2,:)', "spline", "movmean", 500);
 dx = filloutliers(dx, "spline", "movmean", 100);
 dy = filloutliers(d(1,:)', "spline", "movmean", 500);
