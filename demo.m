@@ -72,7 +72,7 @@ else
     disp("ROI selected.")
     x_i = ceil(roi.Position(1)); 
     y_i = ceil(roi.Position(2));
-    x_f = ceil(roi.Position(1) + rect(3)); 
+    x_f = ceil(roi.Position(1) + roi.Position(3)); 
     y_f = ceil(roi.Position(2) + roi.Position(4));
 end
 
