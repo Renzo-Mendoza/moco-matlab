@@ -3,7 +3,7 @@ function h = h_st(A, B, w)
 %   H = H_ST(A, B, W) calculates the cross product of elements of a matrix 
 %   'B' and a matrix 'A' displaced with all combinations of pairs of 
 %   elements from the set [-W+1,...,0,...,W-1] in both dimensions. This 
-%   results is just a convolution of both matrices which is computed using 
+%   results in a convolution of both matrices which is computed using 
 %   FFT for speed.
 
 % Matrices dimensions
